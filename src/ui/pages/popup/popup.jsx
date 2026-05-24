@@ -151,7 +151,11 @@ function Popup() {
   function formatTime(iso) {
     if (!iso) return t('never');
     const min = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
-    return min < 1 ? t('secondsAgo') : t('minutesAgo', String(min));
+    if (min < 1) return t('secondsAgo');
+    if (min < 60) return t('minutesAgo', String(min));
+    const hours = Math.floor(min / 60);
+    if (hours < 24) return t('hoursAgo', String(hours));
+    return t('daysAgo', String(Math.floor(hours / 24)));
   }
 
   if (!ready) return null;

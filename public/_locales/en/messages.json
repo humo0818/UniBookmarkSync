@@ -161,6 +161,9 @@
   "about": {
     "message": "About"
   },
+  "privacyPolicy": {
+    "message": "Privacy Policy"
+  },
   "aboutDesc": {
     "message": "Cross-browser bookmark sync via WebDAV & Git"
   },
@@ -180,6 +183,22 @@
   },
   "newBranch": {
     "message": "New branch..."
+  },
+  "hoursAgo": {
+    "message": "$hours$ h ago",
+    "placeholders": {
+      "hours": {
+        "content": "$1"
+      }
+    }
+  },
+  "daysAgo": {
+    "message": "$days$ d ago",
+    "placeholders": {
+      "days": {
+        "content": "$1"
+      }
+    }
   },
   "secondsAgo": {
     "message": "Just now",

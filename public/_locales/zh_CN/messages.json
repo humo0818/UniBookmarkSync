@@ -161,6 +161,9 @@
   "about": {
     "message": "关于"
   },
+  "privacyPolicy": {
+    "message": "隐私政策"
+  },
   "aboutDesc": {
     "message": "通过 WebDAV 和 Git 跨浏览器同步书签"
   },
@@ -180,6 +183,22 @@
   },
   "newBranch": {
     "message": "新建分支..."
+  },
+  "hoursAgo": {
+    "message": "$hours$ 小时前",
+    "placeholders": {
+      "hours": {
+        "content": "$1"
+      }
+    }
+  },
+  "daysAgo": {
+    "message": "$days$ 天前",
+    "placeholders": {
+      "days": {
+        "content": "$1"
+      }
+    }
   },
   "secondsAgo": {
     "message": "刚刚",

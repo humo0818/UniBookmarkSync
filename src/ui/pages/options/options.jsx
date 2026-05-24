@@ -474,6 +474,9 @@ function Options() {
           <p class="about-text-secondary">
             MIT License · <a href="https://github.com/humo0818/UniBookmarkSync" target="_blank" rel="noopener">github.com/humo0818/UniBookmarkSync</a>
           </p>
+          <p class="about-text-secondary">
+            <a href="https://github.com/humo0818/UniBookmarkSync/blob/master/PRIVACY.md" target="_blank" rel="noopener">{t('privacyPolicy')}</a>
+          </p>
         </section>
       </main>
     </div>
