@@ -211,7 +211,7 @@ function Options() {
       [STORAGE_KEYS.SYNC_CONFIG]: cfg,
       [STORAGE_KEYS.CONFLICT_RESOLUTION]: conflictStrategy,
     });
-    browser.runtime.sendMessage({ type: MESSAGE_TYPES.CONFIG_CHANGED, payload: cfg });
+    browser.runtime.sendMessage({ type: MESSAGE_TYPES.CONFIG_CHANGED, payload: cfg }).catch(() => {});
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
@@ -260,7 +260,7 @@ function Options() {
       [STORAGE_KEYS.THEME_PREFERENCE]: theme,
     });
     setSaved(true);
-    setTimeout(() => browser.runtime.reload(), 600);
+    setTimeout(() => { try { browser.runtime.reload(); } catch (_) {} }, 600);
   }
 
   async function handleLangChange(newLang) {

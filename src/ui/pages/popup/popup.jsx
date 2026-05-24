@@ -47,7 +47,7 @@ function Popup() {
     fetchState();
     loadBranches();
 
-    return () => port.disconnect();
+    return () => { try { port.disconnect(); } catch (_) {} };
   }, []);
 
   async function loadConfig() {
