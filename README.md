@@ -19,8 +19,8 @@ Cross-browser bookmark synchronization extension — sync your bookmarks across 
 ### From Source
 
 ```bash
-git clone <repo-url>
-cd unibookmarksync
+git clone https://github.com/humo0818/UniBookmarkSync.git
+cd UniBookmarkSync
 npm install
 ```
 
