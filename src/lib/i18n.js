@@ -70,9 +70,9 @@ export function t(key, substitutions) {
   }
   if (!msg) msg = key;
 
-  // Simple substitution
+  // Replace Chrome i18n placeholders ($name$ or $1)
   if (substitutions && typeof substitutions === 'string') {
-    msg = msg.replace('$1', substitutions).replace('$minutes$', substitutions);
+    msg = msg.replace(/\$[^$]+\$/g, substitutions);
   }
   return msg;
 }

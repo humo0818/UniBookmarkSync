@@ -7,9 +7,12 @@ import { MESSAGE_TYPES, SYNC_STATUS, ADAPTERS, STORAGE_KEYS, CONFLICT_STRATEGIES
 import { init, t } from '../../../lib/i18n.js';
 
 function clearLastError() {
+  // Consume chrome.runtime.lastError to suppress "Unchecked runtime.lastError" warnings.
+  // Accessing .message properly marks it as handled in Chromium.
   const cr = typeof chrome !== 'undefined' && chrome.runtime;
-  if (cr && cr.lastError) { /* consumed */ }
-  if (browser.runtime.lastError) { /* consumed */ }
+  if (cr?.lastError) {
+    void cr.lastError.message;
+  }
 }
 
 function connectSafe() {
@@ -26,6 +29,7 @@ function connectSafe() {
 async function sendMessageSafe(msg) {
   try {
     const res = await browser.runtime.sendMessage(msg);
+    clearLastError();
     return res;
   } catch (e) {
     clearLastError();
@@ -50,6 +54,7 @@ function Popup() {
   const [hasGitConfig, setHasGitConfig] = useState(false);
 
   useEffect(() => {
+    clearLastError();
     init().then(() => setReady(true));
     loadConfig();
 
@@ -63,6 +68,7 @@ function Popup() {
     if (port) {
       port.onMessage.addListener(onPortMessage);
       port.onDisconnect.addListener(() => {
+        clearLastError();
         port = connectSafe();
         if (port) {
           port.onMessage.addListener(onPortMessage);
@@ -72,6 +78,8 @@ function Popup() {
     }
     fetchState();
     loadBranches();
+    // Clean up any async lastError from service worker wake-up race
+    setTimeout(clearLastError, 200);
 
     return () => { if (port) { try { port.disconnect(); clearLastError(); } catch (_) {} } };
   }, []);
@@ -176,12 +184,17 @@ function Popup() {
 
   function formatTime(iso) {
     if (!iso) return t('never');
-    const min = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+    const date = new Date(iso);
+    const min = Math.floor((Date.now() - date.getTime()) / 60000);
+    if (min < 0) return t('never');
     if (min < 1) return t('secondsAgo');
     if (min < 60) return t('minutesAgo', String(min));
     const hours = Math.floor(min / 60);
     if (hours < 24) return t('hoursAgo', String(hours));
-    return t('daysAgo', String(Math.floor(hours / 24)));
+    const days = Math.floor(hours / 24);
+    if (days <= 30) return t('daysAgo', String(days));
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}`;
   }
 
   if (!ready) return null;

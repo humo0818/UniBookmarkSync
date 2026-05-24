@@ -167,6 +167,9 @@
   "privacyPolicy": {
     "message": "Privacy Policy"
   },
+  "mitLicense": {
+    "message": "MIT License"
+  },
   "aboutDesc": {
     "message": "Cross-browser bookmark sync via WebDAV & Git"
   },

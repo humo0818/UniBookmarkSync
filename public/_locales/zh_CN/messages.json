@@ -167,6 +167,9 @@
   "privacyPolicy": {
     "message": "隐私政策"
   },
+  "mitLicense": {
+    "message": "MIT 许可证"
+  },
   "aboutDesc": {
     "message": "通过 WebDAV 和 Git 跨浏览器同步书签"
   },

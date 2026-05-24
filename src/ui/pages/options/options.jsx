@@ -8,6 +8,13 @@ import {
   STORAGE_KEYS, MESSAGE_TYPES,
 } from '../../../shared/constants.js';
 
+function clearLastError() {
+  const cr = typeof chrome !== 'undefined' && chrome.runtime;
+  if (cr?.lastError) {
+    void cr.lastError.message;
+  }
+}
+
 function CommitList({ config, onClose }) {
   const [commits, setCommits] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -22,10 +29,12 @@ function CommitList({ config, onClose }) {
     setLoading(true);
     setError(null);
     try {
+      clearLastError();
       const res = await browser.runtime.sendMessage({
         type: MESSAGE_TYPES.LIST_COMMITS,
         payload: { config },
       });
+      clearLastError();
       if (res?.ok) {
         setCommits(res.commits);
       } else {
@@ -41,10 +50,12 @@ function CommitList({ config, onClose }) {
     if (!confirm(t('rollbackConfirm'))) return;
     setRollingBack(oid);
     try {
+      clearLastError();
       const res = await browser.runtime.sendMessage({
         type: MESSAGE_TYPES.ROLLBACK_TO,
         payload: { config, oid },
       });
+      clearLastError();
       if (res?.ok) {
         setCommits(null);
         onClose(t('rollbackDone'));
@@ -114,13 +125,16 @@ function CommitList({ config, onClose }) {
 
 function formatDate(iso) {
   const d = new Date(iso);
-  const now = new Date();
-  const diff = now - d;
+  const diff = Date.now() - d.getTime();
   const mins = Math.floor(diff / 60000);
+  if (mins < 0) return t('never');
   if (mins < 1) return t('secondsAgo');
   if (mins < 60) return t('minutesAgo', String(mins));
   if (mins < 1440) return t('hoursAgo', String(Math.floor(mins / 60)));
-  return t('daysAgo', String(Math.floor(mins / 1440)));
+  const days = Math.floor(mins / 1440);
+  if (days <= 30) return t('daysAgo', String(days));
+  const pad = (n) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
 function Options() {
@@ -182,9 +196,11 @@ function Options() {
 
   async function loadBranches(cfg) {
     try {
+      clearLastError();
       const resp = await browser.runtime.sendMessage({
         type: MESSAGE_TYPES.LIST_BRANCHES, payload: { config: cfg },
       });
+      clearLastError();
       if (resp?.ok && resp.branches.length > 0) {
         setBranches(resp.branches);
       }
@@ -211,7 +227,7 @@ function Options() {
       [STORAGE_KEYS.SYNC_CONFIG]: cfg,
       [STORAGE_KEYS.CONFLICT_RESOLUTION]: conflictStrategy,
     });
-    browser.runtime.sendMessage({ type: MESSAGE_TYPES.CONFIG_CHANGED, payload: cfg }).catch(() => {});
+    browser.runtime.sendMessage({ type: MESSAGE_TYPES.CONFIG_CHANGED, payload: cfg }).catch(() => { clearLastError(); });
     setSaved(true);
     setTimeout(() => setSaved(false), 2000);
   }
@@ -222,10 +238,12 @@ function Options() {
     setTestError(null);
     setTestedAdapter(adapter);
     try {
+      clearLastError();
       const res = await browser.runtime.sendMessage({
         type: MESSAGE_TYPES.TEST_CONNECTION,
         payload: { adapter, config },
       });
+      clearLastError();
       setTestResult(res.ok ? 'ok' : 'fail');
       if (!res.ok) setTestError(res.error || '');
     } catch (e) {
@@ -475,7 +493,7 @@ function Options() {
             <a href="https://github.com/humo0818/UniBookmarkSync" target="_blank" rel="noopener">{t('githubRepo')}</a>
           </p>
           <p class="about-text-secondary">
-            <a href="https://github.com/humo0818/UniBookmarkSync/blob/master/LICENSE.md" target="_blank" rel="noopener">MIT License</a>
+            <a href="https://github.com/humo0818/UniBookmarkSync/blob/master/LICENSE.md" target="_blank" rel="noopener">{t('mitLicense')}</a>
           </p>
           <p class="about-text-secondary">
             <a href="https://github.com/humo0818/UniBookmarkSync/blob/master/PRIVACY.md" target="_blank" rel="noopener">{t('privacyPolicy')}</a>
