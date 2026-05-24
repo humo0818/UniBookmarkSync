@@ -39,7 +39,7 @@ async function sendMessageSafe(msg) {
 
 function Popup() {
   const [ready, setReady] = useState(false);
-  const [tab, setTab] = useState(ADAPTERS.WEBDAV);
+  const [adapter, setAdapter] = useState(null);
   const [syncState, setSyncState] = useState({});
   const [autoSyncWebdav, setAutoSyncWebdav] = useState(true);
   const [autoSyncGit, setAutoSyncGit] = useState(true);
@@ -99,11 +99,10 @@ function Popup() {
         setHasWebdavConfig(!!(cfg.webdavUrl && cfg.webdavUser && cfg.webdavPass));
         setHasGitConfig(!!(cfg.gitRemote && cfg.gitToken));
       }
-      // Use popup-selected adapter from storage, fall back to config, then webdav
+      // Use configured adapter from storage (set via options page)
       const activeRes = await browser.storage.local.get(STORAGE_KEYS.ACTIVE_ADAPTER);
       const active = activeRes[STORAGE_KEYS.ACTIVE_ADAPTER];
-      if (active === ADAPTERS.WEBDAV || active === ADAPTERS.GIT) setTab(active);
-      else if (cfg?.adapter === ADAPTERS.WEBDAV || cfg?.adapter === ADAPTERS.GIT) setTab(cfg.adapter);
+      setAdapter(active === ADAPTERS.WEBDAV || active === ADAPTERS.GIT ? active : (cfg?.adapter || null));
       if (result[STORAGE_KEYS.SYNC_STATE]) {
         setSyncState(result[STORAGE_KEYS.SYNC_STATE]);
       }
@@ -149,35 +148,37 @@ function Popup() {
   }
 
   async function handleSync() {
+    if (!adapter) return;
     sendMessageSafe({
       type: MESSAGE_TYPES.MANUAL_SYNC,
       payload: {
-        adapter: tab,
+        adapter,
         force: true,
-        ...(tab === ADAPTERS.GIT ? { branch: autoSync ? '' : gitBranch, description: autoSync ? '' : gitDesc } : {}),
+        ...(adapter === ADAPTERS.GIT ? { branch: autoSync ? '' : gitBranch, description: autoSync ? '' : gitDesc } : {}),
       },
     });
   }
 
-  // Per-adapter states (independent)
-  const autoSync = tab === ADAPTERS.WEBDAV ? autoSyncWebdav : autoSyncGit;
-  const conflictResolution = tab === ADAPTERS.WEBDAV ? conflictWebdav : conflictGit;
+  const autoSync = adapter === ADAPTERS.WEBDAV ? autoSyncWebdav : autoSyncGit;
+  const conflictResolution = adapter === ADAPTERS.WEBDAV ? conflictWebdav : conflictGit;
+  const configured = adapter === ADAPTERS.WEBDAV ? hasWebdavConfig : adapter === ADAPTERS.GIT ? hasGitConfig : false;
+  const adapterLabel = adapter === ADAPTERS.WEBDAV ? 'WebDAV' : adapter === ADAPTERS.GIT ? 'Git' : '';
 
   async function setConflict(val) {
-    if (tab === ADAPTERS.WEBDAV) setConflictWebdav(val); else setConflictGit(val);
-    const key = tab === ADAPTERS.WEBDAV ? STORAGE_KEYS.CONFLICT_RESOLUTION_WEBDAV : STORAGE_KEYS.CONFLICT_RESOLUTION_GIT;
+    if (adapter === ADAPTERS.WEBDAV) setConflictWebdav(val); else setConflictGit(val);
+    const key = adapter === ADAPTERS.WEBDAV ? STORAGE_KEYS.CONFLICT_RESOLUTION_WEBDAV : STORAGE_KEYS.CONFLICT_RESOLUTION_GIT;
     await browser.storage.local.set({ [key]: val, [STORAGE_KEYS.CONFLICT_RESOLUTION]: val });
     sendMessageSafe({ type: MESSAGE_TYPES.CONFIG_CHANGED, payload: {} });
   }
 
   async function toggleAutoSync(val) {
-    if (tab === ADAPTERS.WEBDAV) setAutoSyncWebdav(val); else setAutoSyncGit(val);
-    const key = tab === ADAPTERS.WEBDAV ? STORAGE_KEYS.AUTO_SYNC_WEBDAV : STORAGE_KEYS.AUTO_SYNC_GIT;
+    if (adapter === ADAPTERS.WEBDAV) setAutoSyncWebdav(val); else setAutoSyncGit(val);
+    const key = adapter === ADAPTERS.WEBDAV ? STORAGE_KEYS.AUTO_SYNC_WEBDAV : STORAGE_KEYS.AUTO_SYNC_GIT;
     await browser.storage.local.set({ [key]: val });
     sendMessageSafe({ type: MESSAGE_TYPES.CONFIG_CHANGED, payload: { autoSync: val } });
   }
 
-  const st = syncState[tab] || {};
+  const st = syncState[adapter] || {};
   const tabStatus = st.status || SYNC_STATUS.IDLE;
   const tabLastSync = st.lastSync || null;
   const tabError = st.error || null;
@@ -212,129 +213,116 @@ function Popup() {
             lastSync={tabLastSync}
             bookmarkCount={null}
             errorMessage={tabError}
-            adapter={tab === ADAPTERS.WEBDAV ? 'WebDAV' : 'Git'}
-            configured={tab === ADAPTERS.WEBDAV ? hasWebdavConfig : hasGitConfig}
+            adapter={adapterLabel}
+            configured={configured}
           />
 
-          <div class="tab-bar">
-            <button
-              class={`tab-btn ${tab === ADAPTERS.WEBDAV ? 'tab-btn--active' : ''}`}
-              onClick={() => { setTab(ADAPTERS.WEBDAV); setSyncState(prev => ({ ...prev, webdav: { ...(prev.webdav||{}), status: SYNC_STATUS.IDLE } })); sendMessageSafe({ type: MESSAGE_TYPES.ADAPTER_CHANGED, payload: { adapter: ADAPTERS.WEBDAV } }); }}
-            >{t('webdav')}</button>
-            <button
-              class={`tab-btn ${tab === ADAPTERS.GIT ? 'tab-btn--active' : ''}`}
-              onClick={() => { setTab(ADAPTERS.GIT); setSyncState(prev => ({ ...prev, git: { ...(prev.git||{}), status: SYNC_STATUS.IDLE } })); sendMessageSafe({ type: MESSAGE_TYPES.ADAPTER_CHANGED, payload: { adapter: ADAPTERS.GIT } }); }}
-            >{t('git')}</button>
-          </div>
-
-          {((tab === ADAPTERS.WEBDAV && !hasWebdavConfig) || (tab === ADAPTERS.GIT && !hasGitConfig)) ? (
+          {!adapter || !configured ? (
             <button class="btn-primary sync-btn-full"
-              onClick={async () => { await browser.storage.local.set({ [STORAGE_KEYS.ACTIVE_ADAPTER]: tab }); browser.runtime.openOptionsPage(); }}>
+              onClick={() => browser.runtime.openOptionsPage()}>
               {t('goToSettings')}
             </button>
           ) : (
-            <button class="btn-primary sync-btn-full"
-              onClick={handleSync}
-              disabled={tabStatus === SYNC_STATUS.SYNCING}>
-              {tabStatus === SYNC_STATUS.SYNCING && <span class="sync-spinner" />}
-              {tabStatus === SYNC_STATUS.SYNCING ? t('statusSyncing') : t('syncNow')}
-            </button>
-          )}
-          {tabError && tabStatus !== SYNC_STATUS.SYNCING && (
-            <p class="sync-error-hint">{tabError}</p>
-          )}
+            <>
+              <button class="btn-primary sync-btn-full"
+                onClick={handleSync}
+                disabled={tabStatus === SYNC_STATUS.SYNCING}>
+                {tabStatus === SYNC_STATUS.SYNCING && <span class="sync-spinner" />}
+                {tabStatus === SYNC_STATUS.SYNCING ? t('statusSyncing') : t('syncNow')}
+              </button>
+              {tabError && tabStatus !== SYNC_STATUS.SYNCING && (
+                <p class="sync-error-hint">{tabError}</p>
+              )}
 
-          {tab === ADAPTERS.WEBDAV && (
-            <div class="mode-panel">
-              <div class="info-row">
-                <span class="info-label">{t('syncMode')}</span>
-                {autoSync ? (
-                  <span class="info-value">{t(conflictResolution)}</span>
-                ) : (
-                  <select class="field-input" value={conflictResolution}
-                    onChange={(e) => setConflict(e.target.value)}
-                    style="flex:1;font-size:var(--font-size-xs);padding:2px 4px;">
-                    <option value={CONFLICT_STRATEGIES.SMART_MERGE}>{t('smart-merge')}</option>
-                    <option value={CONFLICT_STRATEGIES.LOCAL_FIRST}>{t('local-first')}</option>
-                    <option value={CONFLICT_STRATEGIES.REMOTE_FIRST}>{t('remote-first')}</option>
-                  </select>
+              <div class="mode-panel">
+                {adapter === ADAPTERS.WEBDAV && (
+                  <>
+                    <div class="info-row">
+                      <span class="info-label">{t('syncMode')}</span>
+                      {autoSync ? (
+                        <span class="info-value">{t(conflictResolution)}</span>
+                      ) : (
+                        <select class="field-input" value={conflictResolution}
+                          onChange={(e) => setConflict(e.target.value)}
+                          style="flex:1;font-size:var(--font-size-xs);padding:2px 4px;">
+                          <option value={CONFLICT_STRATEGIES.SMART_MERGE}>{t('smart-merge')}</option>
+                          <option value={CONFLICT_STRATEGIES.LOCAL_FIRST}>{t('local-first')}</option>
+                          <option value={CONFLICT_STRATEGIES.REMOTE_FIRST}>{t('remote-first')}</option>
+                        </select>
+                      )}
+                    </div>
+                  </>
                 )}
-              </div>
-              <div class="info-row">
-                <span class="info-label">{t('autoSync')}</span>
-                <button
-                  class={`toggle-switch ${autoSync ? 'toggle--on' : ''}`}
-                  onClick={() => toggleAutoSync(!autoSync)}
-                ><span class="toggle-knob" /></button>
-              </div>
-            </div>
-          )}
 
-          {tab === ADAPTERS.GIT && (
-            <div class="mode-panel">
-              {autoSync ? (
-                <div class="info-rows">
-                  <div class="info-row">
-                    <span class="info-label">{t('syncMode')}</span>
-                    <span class="info-value">{t(conflictResolution)}</span>
-                  </div>
-                  <div class="info-row">
-                    <span class="info-label">{t('gitBranch')}</span>
-                    <span class="info-value">{gitBranch}</span>
-                  </div>
-                  <div class="info-row">
-                    <span class="info-label">{t('gitVersion')}</span>
-                    <span class="info-value version-msg">
-                      {gitVersion ? gitVersion.message : (hasGitConfig ? t('loadingCommits') : '')}
-                    </span>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <div class="info-row">
-                    <span class="info-label">{t('syncMode')}</span>
-                    <select class="field-input" value={conflictResolution}
-                      onChange={(e) => setConflict(e.target.value)}
-                      style="flex:1;font-size:var(--font-size-xs);padding:2px 4px;">
-                      <option value={CONFLICT_STRATEGIES.LOCAL_FIRST}>{t('local-first')}</option>
-                      <option value={CONFLICT_STRATEGIES.REMOTE_FIRST}>{t('remote-first')}</option>
-                      <option value={CONFLICT_STRATEGIES.SMART_MERGE}>{t('smart-merge')}</option>
-                    </select>
-                  </div>
-                  <div class="field-row">
-                    <label class="field-label">{t('gitBranch')}</label>
-                    {customBranch ? (
-                      <div class="field-input-wrap">
-                        <input class="field-input" type="text" value={gitBranch}
-                          onInput={(e) => setGitBranch(e.target.value)} placeholder="branch name" />
-                        <button class="field-input-clear" onClick={() => { setCustomBranch(false); setGitBranch(branches[0]||'main'); }}>✕</button>
+                {adapter === ADAPTERS.GIT && (
+                  <>
+                    {autoSync ? (
+                      <div class="info-rows">
+                        <div class="info-row">
+                          <span class="info-label">{t('syncMode')}</span>
+                          <span class="info-value">{t(conflictResolution)}</span>
+                        </div>
+                        <div class="info-row">
+                          <span class="info-label">{t('gitBranch')}</span>
+                          <span class="info-value">{gitBranch}</span>
+                        </div>
+                        <div class="info-row">
+                          <span class="info-label">{t('gitVersion')}</span>
+                          <span class="info-value version-msg">
+                            {gitVersion ? gitVersion.message : (hasGitConfig ? t('loadingCommits') : '')}
+                          </span>
+                        </div>
                       </div>
                     ) : (
-                      <select class="field-input" value={gitBranch}
-                        onChange={(e) => {
-                          if (e.target.value === '__new__') { setCustomBranch(true); setGitBranch(''); }
-                          else setGitBranch(e.target.value);
-                        }}>
-                        {branches.map(b => <option key={b} value={b}>{b}</option>)}
-                        <option value="__new__">+ {t('newBranch')}</option>
-                      </select>
+                      <>
+                        <div class="info-row">
+                          <span class="info-label">{t('syncMode')}</span>
+                          <select class="field-input" value={conflictResolution}
+                            onChange={(e) => setConflict(e.target.value)}
+                            style="flex:1;font-size:var(--font-size-xs);padding:2px 4px;">
+                            <option value={CONFLICT_STRATEGIES.LOCAL_FIRST}>{t('local-first')}</option>
+                            <option value={CONFLICT_STRATEGIES.REMOTE_FIRST}>{t('remote-first')}</option>
+                            <option value={CONFLICT_STRATEGIES.SMART_MERGE}>{t('smart-merge')}</option>
+                          </select>
+                        </div>
+                        <div class="field-row">
+                          <label class="field-label">{t('gitBranch')}</label>
+                          {customBranch ? (
+                            <div class="field-input-wrap">
+                              <input class="field-input" type="text" value={gitBranch}
+                                onInput={(e) => setGitBranch(e.target.value)} placeholder="branch name" />
+                              <button class="field-input-clear" onClick={() => { setCustomBranch(false); setGitBranch(branches[0]||'main'); }}>✕</button>
+                            </div>
+                          ) : (
+                            <select class="field-input" value={gitBranch}
+                              onChange={(e) => {
+                                if (e.target.value === '__new__') { setCustomBranch(true); setGitBranch(''); }
+                                else setGitBranch(e.target.value);
+                              }}>
+                              {branches.map(b => <option key={b} value={b}>{b}</option>)}
+                              <option value="__new__">+ {t('newBranch')}</option>
+                            </select>
+                          )}
+                        </div>
+                        <div class="field-row">
+                          <label class="field-label">{t('gitDesc')}</label>
+                          <input class="field-input" type="text" value={gitDesc}
+                            onInput={(e) => setGitDesc(e.target.value)} placeholder={t('gitDescPlaceholder')} />
+                        </div>
+                      </>
                     )}
-                  </div>
-                  <div class="field-row">
-                    <label class="field-label">{t('gitDesc')}</label>
-                    <input class="field-input" type="text" value={gitDesc}
-                      onInput={(e) => setGitDesc(e.target.value)} placeholder={t('gitDescPlaceholder')} />
-                  </div>
-                </>
-              )}
-              <div class="info-row" style={autoSync ? {marginTop:'var(--space-2)',paddingTop:'var(--space-2)',borderTop:'1px solid var(--color-border)'} : {}}>
-                <span class="info-label">{t('autoSync')}</span>
-                <button
-                  class={`toggle-switch ${autoSync ? 'toggle--on' : ''}`}
-                  onClick={() => toggleAutoSync(!autoSync)}
-                ><span class="toggle-knob" /></button>
+                  </>
+                )}
+
+                <div class="info-row" style={autoSync ? {marginTop:'var(--space-2)',paddingTop:'var(--space-2)',borderTop:'1px solid var(--color-border)'} : {}}>
+                  <span class="info-label">{t('autoSync')}</span>
+                  <button
+                    class={`toggle-switch ${autoSync ? 'toggle--on' : ''}`}
+                    onClick={() => toggleAutoSync(!autoSync)}
+                  ><span class="toggle-knob" /></button>
+                </div>
               </div>
-            </div>
+            </>
           )}
         </main>
 

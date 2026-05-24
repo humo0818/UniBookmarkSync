@@ -14,14 +14,19 @@ let currentLang = 'en';
 /** Initialize — load saved language or detect from browser. */
 export async function init() {
   const result = await browser.storage.sync.get('lang');
-  // Detect browser language; default to 'en' unless Chinese
+  // Detect browser language from system; default to 'en' for unsupported languages
   let uiLang = 'en';
   try {
     const raw = browser.i18n.getUILanguage();
     uiLang = typeof raw === 'string' ? raw : 'en';
   } catch { /* keep default */ }
 
-  currentLang = result.lang || (uiLang.startsWith('zh') ? 'zh_CN' : 'en');
+  const langMap = { zh: 'zh_CN', es: 'es', fr: 'fr', ar: 'ar', ru: 'ru', ja: 'ja', ko: 'ko' };
+  let detected = 'en';
+  for (const [prefix, code] of Object.entries(langMap)) {
+    if (uiLang.startsWith(prefix)) { detected = code; break; }
+  }
+  currentLang = result.lang || detected;
   await loadMessages(currentLang);
 }
 

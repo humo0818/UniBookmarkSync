@@ -96,7 +96,7 @@
     "message": "Sync commit message..."
   },
   "autoSync": {
-    "message": "Auto-sync"
+    "message": "Auto Sync"
   },
   "remoteHelp": {
     "message": "Supports GitHub (github.com) and GitLab (gitlab.com). Enter the HTTPS URL of your repository, e.g. https://github.com/user/bookmarks.git"
@@ -132,7 +132,7 @@
     "message": "Local First"
   },
   "syncMode": {
-    "message": "Sync mode"
+    "message": "Sync Mode"
   },
   "remote_first": {
     "message": "Remote First"

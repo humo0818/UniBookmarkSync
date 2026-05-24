@@ -226,6 +226,7 @@ function Options() {
     await browser.storage.local.set({
       [STORAGE_KEYS.SYNC_CONFIG]: cfg,
       [STORAGE_KEYS.CONFLICT_RESOLUTION]: conflictStrategy,
+      [STORAGE_KEYS.ACTIVE_ADAPTER]: adapter,
     });
     browser.runtime.sendMessage({ type: MESSAGE_TYPES.CONFIG_CHANGED, payload: cfg }).catch(() => { clearLastError(); });
     setSaved(true);
@@ -274,7 +275,7 @@ function Options() {
     await browser.storage.local.set({
       [STORAGE_KEYS.SYNC_CONFIG]: cfg,
       [STORAGE_KEYS.CONFLICT_RESOLUTION]: conflictStrategy,
-      [STORAGE_KEYS.AUTO_SYNC]: true,
+      [STORAGE_KEYS.ACTIVE_ADAPTER]: adapter,
       [STORAGE_KEYS.THEME_PREFERENCE]: theme,
     });
     setSaved(true);
@@ -444,20 +445,16 @@ function Options() {
 
         <section class="card">
           <h2>{t('langLabel')}</h2>
-          <div class="radio-group">
-            {[
-              ['en', 'English'],
-              ['zh_CN', '中文'],
-            ].map(([value, label]) => (
-              <button
-                key={value}
-                class={`radio-item ${lang === value ? 'selected' : ''}`}
-                onClick={() => handleLangChange(value)}
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+          <select class="field-input" value={lang} onChange={(e) => handleLangChange(e.target.value)}>
+            <option value="en">English</option>
+            <option value="zh_CN">中文</option>
+            <option value="es">Español</option>
+            <option value="fr">Français</option>
+            <option value="ar">العربية</option>
+            <option value="ru">Русский</option>
+            <option value="ja">日本語</option>
+            <option value="ko">한국어</option>
+          </select>
         </section>
 
         <section class="card">

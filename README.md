@@ -10,7 +10,7 @@ Cross-browser bookmark synchronization extension — sync your bookmarks across 
 - **Conflict Resolution** — three strategies: Smart Merge (three-way merge), Local First, Remote First
 - **Cross-Browser Stable IDs** — path-based bookmark IDs ensure the same bookmark is recognized across browsers
 - **Per-Adapter Independence** — WebDAV and Git operate as separate modules with isolated auto-sync, conflict resolution, and state
-- **Internationalization** — English and Chinese (zh_CN) with full i18n coverage
+- **Internationalization** — 8 languages: English, 中文, Español, Français, العربية, Русский, 日本語, 한국어
 - **Dark / Light Theme** — auto-detects `prefers-color-scheme`, with manual override in settings
 - **Privacy** — no third-party servers; your data stays on your own WebDAV server or Git repository
 
@@ -84,8 +84,10 @@ Load the extension:
 unibookmarksync/
 ├── public/
 │   ├── _locales/
-│   │   ├── en/messages.json          # English i18n strings
-│   │   └── zh_CN/messages.json       # Chinese i18n strings
+│   │   ├── en/    # English    ├── zh_CN/ # 中文
+│   │   ├── es/    # Español    ├── fr/    # Français
+│   │   ├── ar/    # العربية     ├── ru/    # Русский
+│   │   ├── ja/    # 日本語      └── ko/    # 한국어
 │   └── icons/                        # Extension icons
 ├── src/
 │   ├── background/                   # Service worker (MV3 background)
