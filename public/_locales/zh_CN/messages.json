@@ -161,6 +161,9 @@
   "about": {
     "message": "关于"
   },
+  "githubRepo": {
+    "message": "GitHub 仓库"
+  },
   "privacyPolicy": {
     "message": "隐私政策"
   },

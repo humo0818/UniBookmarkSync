@@ -119,8 +119,8 @@ function formatDate(iso) {
   const mins = Math.floor(diff / 60000);
   if (mins < 1) return t('secondsAgo');
   if (mins < 60) return t('minutesAgo', String(mins));
-  if (mins < 1440) return `${Math.floor(mins / 60)}h ago`;
-  return d.toLocaleDateString();
+  if (mins < 1440) return t('hoursAgo', String(Math.floor(mins / 60)));
+  return t('daysAgo', String(Math.floor(mins / 1440)));
 }
 
 function Options() {
@@ -470,9 +470,12 @@ function Options() {
         <section class="card about-card">
           <h2>{t('about')}</h2>
           <p class="about-text">UniBookmarkSync v1.0.0</p>
-          <p class="about-text-secondary">{t('aboutDesc')}</p>
+          <p class="about-text">{t('aboutDesc')}</p>
           <p class="about-text-secondary">
-            MIT License · <a href="https://github.com/humo0818/UniBookmarkSync" target="_blank" rel="noopener">github.com/humo0818/UniBookmarkSync</a>
+            <a href="https://github.com/humo0818/UniBookmarkSync" target="_blank" rel="noopener">{t('githubRepo')}</a>
+          </p>
+          <p class="about-text-secondary">
+            <a href="https://github.com/humo0818/UniBookmarkSync/blob/master/LICENSE.md" target="_blank" rel="noopener">MIT License</a>
           </p>
           <p class="about-text-secondary">
             <a href="https://github.com/humo0818/UniBookmarkSync/blob/master/PRIVACY.md" target="_blank" rel="noopener">{t('privacyPolicy')}</a>

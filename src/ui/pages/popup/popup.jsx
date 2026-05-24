@@ -6,9 +6,31 @@ import browser from '../../../lib/browser-polyfill.js';
 import { MESSAGE_TYPES, SYNC_STATUS, ADAPTERS, STORAGE_KEYS, CONFLICT_STRATEGIES } from '../../../shared/constants.js';
 import { init, t } from '../../../lib/i18n.js';
 
+function clearLastError() {
+  const cr = typeof chrome !== 'undefined' && chrome.runtime;
+  if (cr && cr.lastError) { /* consumed */ }
+  if (browser.runtime.lastError) { /* consumed */ }
+}
+
+function connectSafe() {
+  try {
+    const p = browser.runtime.connect({ name: 'popup' });
+    clearLastError();
+    return p;
+  } catch (_) {
+    clearLastError();
+    return null;
+  }
+}
+
 async function sendMessageSafe(msg) {
-  try { return await browser.runtime.sendMessage(msg); }
-  catch (e) { if (!e.message?.includes('Could not establish connection')) console.error(e); return null; }
+  try {
+    const res = await browser.runtime.sendMessage(msg);
+    return res;
+  } catch (e) {
+    clearLastError();
+    return null;
+  }
 }
 
 function Popup() {
@@ -31,23 +53,27 @@ function Popup() {
     init().then(() => setReady(true));
     loadConfig();
 
-    let port = browser.runtime.connect({ name: 'popup' });
+    let port = connectSafe();
     const onPortMessage = (msg) => {
       if (msg.type === MESSAGE_TYPES.SYNC_STATUS) {
         if (msg.payload.syncState) setSyncState(msg.payload.syncState);
         if (msg.payload.conflictResolution) setConflictWebdav(msg.payload.conflictResolution); setConflictGit(msg.payload.conflictResolution);
       }
     };
-    port.onMessage.addListener(onPortMessage);
-    port.onDisconnect.addListener(() => {
-      port = browser.runtime.connect({ name: 'popup' });
+    if (port) {
       port.onMessage.addListener(onPortMessage);
-      fetchState();
-    });
+      port.onDisconnect.addListener(() => {
+        port = connectSafe();
+        if (port) {
+          port.onMessage.addListener(onPortMessage);
+        }
+        fetchState();
+      });
+    }
     fetchState();
     loadBranches();
 
-    return () => { try { port.disconnect(); } catch (_) {} };
+    return () => { if (port) { try { port.disconnect(); clearLastError(); } catch (_) {} } };
   }, []);
 
   async function loadConfig() {

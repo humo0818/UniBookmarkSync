@@ -34,7 +34,7 @@ export default function StatusIndicator({ status, lastSync, bookmarkCount, error
         <img src={iconUrl} class={`status-svg-icon ${filterClass}`} alt="" />
       </div>
       <span class="status-label">{label}</span>
-      {lastSync && (
+      {lastSync && effectiveStatus === 'idle' && (
         <div class="status-meta">
           <span>{t('lastSync')}: {formatRelativeTime(lastSync)}</span>
           {bookmarkCount != null && (
@@ -48,7 +48,10 @@ export default function StatusIndicator({ status, lastSync, bookmarkCount, error
 }
 
 function formatRelativeTime(iso) {
-  const minutes = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
-  if (minutes < 1) return t('secondsAgo');
-  return t('minutesAgo', String(minutes));
+  const min = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
+  if (min < 1) return t('secondsAgo');
+  if (min < 60) return t('minutesAgo', String(min));
+  const hours = Math.floor(min / 60);
+  if (hours < 24) return t('hoursAgo', String(hours));
+  return t('daysAgo', String(Math.floor(hours / 24)));
 }
