@@ -1,0 +1,25 @@
+{
+  "name": "unibookmarksync",
+  "version": "1.0.0",
+  "description": "UniBookmarkSync - Cross-browser bookmark sync via WebDAV and Git",
+  "type": "module",
+  "scripts": {
+    "dev:chrome": "cross-env BROWSER=chrome vite build --watch",
+    "dev:firefox": "cross-env BROWSER=firefox vite build --watch",
+    "build:chrome": "cross-env BROWSER=chrome vite build",
+    "build:firefox": "cross-env BROWSER=firefox vite build",
+    "build:edge": "cross-env BROWSER=edge vite build",
+    "build:safari": "cross-env BROWSER=safari vite build",
+    "build:all": "npm run build:chrome && npm run build:firefox && npm run build:edge && npm run build:safari"
+  },
+  "dependencies": {
+    "preact": "^10.20.0",
+    "webextension-polyfill": "^0.10.0"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.9.0",
+    "@samrum/vite-plugin-web-extension": "^5.1.0",
+    "cross-env": "^7.0.3",
+    "vite": "^5.4.0"
+  }
+}

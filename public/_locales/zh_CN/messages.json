@@ -1,0 +1,192 @@
+{
+  "extName": {
+    "message": "UniBookmarkSync"
+  },
+  "extDesc": {
+    "message": "通过 WebDAV 和 Git 跨浏览器同步书签。"
+  },
+  "statusIdle": {
+    "message": "已同步"
+  },
+  "statusNever": {
+    "message": "未同步"
+  },
+  "statusNotConfigured": {
+    "message": "未配置"
+  },
+  "langLabel": {
+    "message": "语言"
+  },
+  "rollback": {
+    "message": "版本历史"
+  },
+  "rollbackDone": {
+    "message": "回滚成功"
+  },
+  "rollbackTo": {
+    "message": "回滚到此版本"
+  },
+  "loadCommits": {
+    "message": "加载历史"
+  },
+  "loadingCommits": {
+    "message": "加载中..."
+  },
+  "gitVersion": {
+    "message": "当前版本"
+  },
+  "noCommits": {
+    "message": "暂无历史记录"
+  },
+  "currentVersion": {
+    "message": "当前版本"
+  },
+  "rollbackConfirm": {
+    "message": "回滚会将书签恢复到此版本。确定继续？"
+  },
+  "statusSyncing": {
+    "message": "同步中..."
+  },
+  "statusError": {
+    "message": "同步失败"
+  },
+  "statusConflict": {
+    "message": "检测到冲突"
+  },
+  "syncNow": {
+    "message": "立即同步"
+  },
+  "lastSync": {
+    "message": "上次同步"
+  },
+  "settings": {
+    "message": "设置"
+  },
+  "provider": {
+    "message": "同步方式"
+  },
+  "webdav": {
+    "message": "WebDAV"
+  },
+  "git": {
+    "message": "Git"
+  },
+  "webdavUrl": {
+    "message": "WebDAV 地址"
+  },
+  "username": {
+    "message": "用户名"
+  },
+  "password": {
+    "message": "密码"
+  },
+  "gitRemote": {
+    "message": "远程仓库地址"
+  },
+  "gitBranch": {
+    "message": "分支"
+  },
+  "gitToken": {
+    "message": "访问令牌"
+  },
+  "gitDesc": {
+    "message": "描述"
+  },
+  "gitDescPlaceholder": {
+    "message": "同步提交信息..."
+  },
+  "autoSync": {
+    "message": "自动同步"
+  },
+  "remoteHelp": {
+    "message": "支持 GitHub (github.com) 和 GitLab (gitlab.com)。输入仓库的 HTTPS 地址，例如 https://github.com/user/bookmarks.git"
+  },
+  "tokenHelp": {
+    "message": "GitHub：Settings → Developer settings → Tokens (classic) — 权限：repo 或 public_repo。GitLab：Settings → Access Tokens — 权限：api。将生成的令牌粘贴至此。"
+  },
+  "testConnection": {
+    "message": "测试连接"
+  },
+  "testing": {
+    "message": "测试中..."
+  },
+  "save": {
+    "message": "保存"
+  },
+  "saved": {
+    "message": "已保存"
+  },
+  "goToSettings": {
+    "message": "前往设置"
+  },
+  "connectionOk": {
+    "message": "连接成功"
+  },
+  "connectionFail": {
+    "message": "连接失败"
+  },
+  "conflictResolution": {
+    "message": "冲突解决策略"
+  },
+  "local_first": {
+    "message": "本地优先"
+  },
+  "syncMode": {
+    "message": "同步模式"
+  },
+  "remote_first": {
+    "message": "远程优先"
+  },
+  "smart_merge": {
+    "message": "智能合并"
+  },
+  "appearance": {
+    "message": "外观"
+  },
+  "themeAuto": {
+    "message": "自动"
+  },
+  "themeLight": {
+    "message": "浅色"
+  },
+  "themeDark": {
+    "message": "深色"
+  },
+  "saveReload": {
+    "message": "保存并重载"
+  },
+  "saveReloadDone": {
+    "message": "已保存，正在重载..."
+  },
+  "about": {
+    "message": "关于"
+  },
+  "aboutDesc": {
+    "message": "通过 WebDAV 和 Git 跨浏览器同步书签"
+  },
+  "bookmarkCount": {
+    "message": "书签数"
+  },
+  "never": {
+    "message": "从未"
+  },
+  "minutesAgo": {
+    "message": "$minutes$ 分钟前",
+    "placeholders": {
+      "minutes": {
+        "content": "$1"
+      }
+    }
+  },
+  "newBranch": {
+    "message": "新建分支..."
+  },
+  "secondsAgo": {
+    "message": "刚刚",
+    "placeholders": {
+      "seconds": {
+        "content": "$1"
+      }
+    }
+  }
+}

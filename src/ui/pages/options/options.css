@@ -1,0 +1,316 @@
+.options {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-4) var(--space-12);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.options-header {
+  margin-bottom: var(--space-6);
+}
+
+.options-header h1 {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.subtitle {
+  margin: var(--space-1) 0 0;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.card {
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-4) var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+.card h2 {
+  margin: 0 0 var(--space-3);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+}
+
+.adapter-config {
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.config-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-2) var(--space-4);
+  background: var(--color-bg);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: border-color var(--transition-fast);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-accent);
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.test-result {
+  margin-top: var(--space-2);
+  font-size: var(--font-size-sm);
+}
+
+.test-result.ok {
+  color: var(--color-success);
+}
+
+.test-result.fail {
+  color: var(--color-error);
+}
+
+.rollback-msg {
+  font-size: var(--font-size-xs);
+  margin-left: var(--space-2);
+}
+
+.rollback-msg.ok {
+  color: var(--color-success);
+}
+
+.rollback-msg.fail {
+  color: var(--color-error);
+}
+
+/* Commit list */
+.commit-panel {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  animation: fadeIn 0.3s ease;
+}
+
+.commit-title {
+  margin: 0 0 var(--space-2);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+}
+
+.commit-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.commit-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid var(--color-border);
+  gap: var(--space-2);
+}
+
+.commit-item:last-child {
+  border-bottom: none;
+}
+
+.commit-item--current {
+  background: var(--color-bg-secondary);
+  margin: 0 calc(-1 * var(--space-3));
+  padding-left: var(--space-3);
+  padding-right: var(--space-3);
+}
+
+.commit-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.commit-msg {
+  display: block;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.commit-time {
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+
+.commit-actions {
+  flex-shrink: 0;
+}
+
+.commit-badge {
+  font-size: 11px;
+  color: var(--color-accent);
+  font-weight: 500;
+  padding: 2px 6px;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-sm);
+}
+
+.btn-small {
+  padding: 4px 10px;
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  background: var(--color-accent);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--transition-fast);
+}
+
+.btn-small:hover {
+  background: var(--color-accent-hover);
+}
+
+.btn-small:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.commit-loading,
+.commit-empty {
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+  padding: var(--space-3) 0;
+}
+
+.commit-error {
+  text-align: center;
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-2);
+}
+
+.save-card {
+  text-align: center;
+  padding: var(--space-3) var(--space-4);
+}
+
+.save-reload-btn {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+}
+
+.about-card {
+  opacity: 0.7;
+}
+
+.about-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+}
+
+.help-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  margin-left: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  background: var(--color-bg-tertiary);
+  border-radius: 50%;
+  cursor: help;
+  vertical-align: middle;
+  transition: all var(--transition-fast);
+}
+
+.help-icon:hover {
+  color: #fff;
+  background: var(--color-accent);
+}
+
+.about-text-secondary {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-1);
+}
+
+.about-text a,
+.about-text-secondary a {
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.about-text a:hover,
+.about-text-secondary a:hover {
+  text-decoration: underline;
+}
+
+.field-input {
+  flex: 1;
+  max-width: 200px;
+  padding: var(--space-1) var(--space-2);
+  font-size: var(--font-size-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.field-input:focus {
+  border-color: var(--color-accent);
+}
+
+.field-input-wrap {
+  display: flex;
+  gap: 2px;
+}
+
+.field-input-wrap .field-input {
+  flex: 1;
+}
+
+.field-input-clear {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: 0 var(--space-2);
+  font-size: var(--font-size-sm);
+}
+
+.field-input-clear:hover {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}

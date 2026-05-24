@@ -1,0 +1,305 @@
+.popup {
+  width: 320px;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.popup-header {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.popup-header h1 {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.popup-body {
+  flex: 1;
+  padding: var(--space-3) var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.popup-footer {
+  padding: var(--space-2) var(--space-4);
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: flex-end;
+}
+
+/* Tab switcher */
+.tab-bar {
+  display: flex;
+  gap: 0;
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-align: center;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.tab-btn--active {
+  background: var(--color-bg-secondary);
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+/* Full-width sync button */
+.sync-btn-full {
+  width: 100%;
+  padding: var(--space-2) var(--space-4);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+}
+
+.sync-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.sync-error-hint {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-error);
+  text-align: center;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Mode panel */
+.mode-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+/* Info rows (stacked) */
+.info-rows {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+/* WebDAV info rows */
+.info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.info-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.info-value {
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+.version-msg {
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Toggle switch */
+.toggle-switch {
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--color-bg-tertiary);
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: background var(--transition-fast);
+  padding: 0;
+}
+
+.toggle--on {
+  background: var(--color-accent);
+}
+
+.toggle-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform var(--transition-fast);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.15);
+}
+
+.toggle--on .toggle-knob {
+  transform: translateX(16px);
+}
+
+/* Fields */
+.field-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  justify-content: space-between;
+}
+
+.field-label {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+  min-width: 44px;
+}
+
+.field-input {
+  flex: 1;
+  max-width: 160px;
+  padding: var(--space-1) var(--space-2);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+  outline: none;
+}
+
+.field-input:focus {
+  border-color: var(--color-accent);
+}
+
+.field-input-wrap {
+  display: flex;
+  gap: 2px;
+}
+
+.field-input-wrap .field-input {
+  flex: 1;
+}
+
+.field-input-clear {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  padding: 0 6px;
+  font-size: var(--font-size-xs);
+}
+
+.field-input-clear:hover {
+  color: var(--color-error);
+  border-color: var(--color-error);
+}
+
+/* Status indicator */
+.status-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-2) 0 var(--space-1);
+}
+
+.status-icon-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: var(--space-1);
+  width: 80px;
+  height: 80px;
+  transition: transform 0.4s ease;
+}
+
+.status-icon--pulse {
+  animation: icon-float 2s ease-in-out infinite;
+}
+
+@keyframes icon-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.status-svg-icon {
+  width: 80px;
+  height: 80px;
+  transition: filter 0.4s ease;
+}
+
+/* Color filters — base SVG color is #3632D8 (blue/purple) */
+.icon-filter--blue {
+  filter: none;
+}
+
+.icon-filter--green {
+  filter: brightness(0) saturate(100%) invert(60%) sepia(72%) saturate(1537%) hue-rotate(83deg) brightness(96%) contrast(89%);
+}
+
+.icon-filter--red {
+  filter: brightness(0) saturate(100%) invert(27%) sepia(93%) saturate(7488%) hue-rotate(357deg) brightness(92%) contrast(110%);
+}
+
+.icon-filter--gray {
+  filter: grayscale(100%) opacity(0.4);
+}
+
+.icon-filter--orange {
+  filter: brightness(0) saturate(100%) invert(55%) sepia(97%) saturate(1800%) hue-rotate(0deg) brightness(101%) contrast(95%);
+}
+
+.status-label {
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+  text-align: center;
+}
+
+.status-meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  text-align: center;
+}
+
+.status-error {
+  font-size: var(--font-size-xs);
+  color: var(--color-error);
+  padding: var(--space-2);
+  background: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+  animation: fadeIn 0.3s ease;
+  width: 100%;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-2px); }
+  to { opacity: 1; transform: translateY(0); }
+}

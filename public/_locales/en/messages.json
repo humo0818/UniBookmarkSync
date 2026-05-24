@@ -1,0 +1,192 @@
+{
+  "extName": {
+    "message": "UniBookmarkSync"
+  },
+  "extDesc": {
+    "message": "Sync bookmarks across browsers via WebDAV and Git."
+  },
+  "statusIdle": {
+    "message": "Synced"
+  },
+  "statusNever": {
+    "message": "Not synced"
+  },
+  "statusNotConfigured": {
+    "message": "Not configured"
+  },
+  "langLabel": {
+    "message": "Language"
+  },
+  "rollback": {
+    "message": "Version History"
+  },
+  "rollbackDone": {
+    "message": "Rolled back successfully"
+  },
+  "rollbackTo": {
+    "message": "Rollback to this"
+  },
+  "loadCommits": {
+    "message": "Load History"
+  },
+  "loadingCommits": {
+    "message": "Loading..."
+  },
+  "gitVersion": {
+    "message": "Version"
+  },
+  "noCommits": {
+    "message": "No history yet"
+  },
+  "currentVersion": {
+    "message": "Current"
+  },
+  "rollbackConfirm": {
+    "message": "Rollback will restore bookmarks from this version. Continue?"
+  },
+  "statusSyncing": {
+    "message": "Syncing..."
+  },
+  "statusError": {
+    "message": "Sync failed"
+  },
+  "statusConflict": {
+    "message": "Conflicts detected"
+  },
+  "syncNow": {
+    "message": "Sync Now"
+  },
+  "lastSync": {
+    "message": "Last sync"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "provider": {
+    "message": "Sync Provider"
+  },
+  "webdav": {
+    "message": "WebDAV"
+  },
+  "git": {
+    "message": "Git"
+  },
+  "webdavUrl": {
+    "message": "WebDAV URL"
+  },
+  "username": {
+    "message": "Username"
+  },
+  "password": {
+    "message": "Password"
+  },
+  "gitRemote": {
+    "message": "Remote URL"
+  },
+  "gitBranch": {
+    "message": "Branch"
+  },
+  "gitToken": {
+    "message": "Personal Access Token"
+  },
+  "gitDesc": {
+    "message": "Description"
+  },
+  "gitDescPlaceholder": {
+    "message": "Sync commit message..."
+  },
+  "autoSync": {
+    "message": "Auto-sync"
+  },
+  "remoteHelp": {
+    "message": "Supports GitHub (github.com) and GitLab (gitlab.com). Enter the HTTPS URL of your repository, e.g. https://github.com/user/bookmarks.git"
+  },
+  "tokenHelp": {
+    "message": "GitHub: Settings → Developer settings → Tokens (classic) — scopes: repo or public_repo. GitLab: Settings → Access Tokens — scopes: api. Paste the generated token here."
+  },
+  "testConnection": {
+    "message": "Test Connection"
+  },
+  "testing": {
+    "message": "Testing..."
+  },
+  "save": {
+    "message": "Save"
+  },
+  "saved": {
+    "message": "Saved"
+  },
+  "goToSettings": {
+    "message": "Go to Settings"
+  },
+  "connectionOk": {
+    "message": "Connection successful"
+  },
+  "connectionFail": {
+    "message": "Connection failed"
+  },
+  "conflictResolution": {
+    "message": "Conflict Resolution"
+  },
+  "local_first": {
+    "message": "Local First"
+  },
+  "syncMode": {
+    "message": "Sync mode"
+  },
+  "remote_first": {
+    "message": "Remote First"
+  },
+  "smart_merge": {
+    "message": "Smart Merge"
+  },
+  "appearance": {
+    "message": "Appearance"
+  },
+  "themeAuto": {
+    "message": "Auto"
+  },
+  "themeLight": {
+    "message": "Light"
+  },
+  "themeDark": {
+    "message": "Dark"
+  },
+  "saveReload": {
+    "message": "Save & Reload"
+  },
+  "saveReloadDone": {
+    "message": "Saved. Reloading..."
+  },
+  "about": {
+    "message": "About"
+  },
+  "aboutDesc": {
+    "message": "Cross-browser bookmark sync via WebDAV & Git"
+  },
+  "bookmarkCount": {
+    "message": "Bookmarks"
+  },
+  "never": {
+    "message": "Never"
+  },
+  "minutesAgo": {
+    "message": "$minutes$ min ago",
+    "placeholders": {
+      "minutes": {
+        "content": "$1"
+      }
+    }
+  },
+  "newBranch": {
+    "message": "New branch..."
+  },
+  "secondsAgo": {
+    "message": "Just now",
+    "placeholders": {
+      "seconds": {
+        "content": "$1"
+      }
+    }
+  }
+}
